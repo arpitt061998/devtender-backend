@@ -1,25 +1,36 @@
 import express, { NextFunction, Request, Response } from 'express';
-
+import User from './model/user';
+import connectDB from './config/database';
 const app = express();
 const port = 3000;
 
 // Define a simple route
 
-app.get('/user', (req: Request, res: Response): void => {
-    console.log(req.params);
-    console.log(req.query);
-    throw new Error("Something went wrong!");
-    res.send('Hello, TypeScript with Express!');
-});
-
-app.use("/",(err:Error, req: Request, res: Response,next: NextFunction): void => {
-    if(err) {
-     res.status(500).send("error");
+app.post("/signup", async(req: Request, res: Response) => {
+    const userObj = {
+        firstName: "Virat",
+        lastName: "Kohli",
+        emailId: "viratkohli.in@gmail.com",
+        password: "virat123",
+        age: 36,
+        gender: "Male"
+    };
+    const user = new User(userObj);
+    try {
+        await user.save();
+        res.send("user added successfully")
+    } catch(err){
+        res.status(400).send("Error saving user")
     }
- })
-
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
 });
+
+connectDB().then(() => {
+    console.log("databse connection established");
+    app.listen(port, () => {
+        console.log(`Server is running at http://localhost:${port}`);
+    });
+}).catch((err: Error )=> {
+    console.error("database cannot be connected");
+})
+
  
