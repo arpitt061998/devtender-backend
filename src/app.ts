@@ -4,18 +4,10 @@ import connectDB from './config/database';
 const app = express();
 const port = 3000;
 
-// Define a simple route
 
+app.use(express.json());
 app.post("/signup", async(req: Request, res: Response) => {
-    const userObj = {
-        firstName: "Virat",
-        lastName: "Kohli",
-        emailId: "viratkohli.in@gmail.com",
-        password: "virat123",
-        age: 36,
-        gender: "Male"
-    };
-    const user = new User(userObj);
+    const user = new User(req.body);
     try {
         await user.save();
         res.send("user added successfully")
