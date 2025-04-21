@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document }  from "mongoose";
 import { isEmail } from "validator";
 
-interface IUser extends Document {
+export interface IUser extends Document {
     firstName: string;
     lastName: string;
     emailId: string;

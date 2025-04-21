@@ -8,10 +8,11 @@
     "forceConsistentCasingInFileNames": true, // Ensure consistent file naming case
     "outDir": "./dist",                // The output folder for compiled JavaScript files
     "rootDir": "./src",                // The root folder for TypeScript files
-    "resolveJsonModule": true          // Allow importing JSON files
+    "resolveJsonModule": true,         // Allow importing JSON files
   },
   "include": [
-    "src/**/*.ts"                      // Specify the TypeScript files location
+    "src/**/*.ts",
+    "src/types/*.d.ts"              // Ensure the types folder is included
   ],
   "exclude": [
     "node_modules"                     // Exclude node_modules from compilation
