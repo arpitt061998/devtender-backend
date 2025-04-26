@@ -5,3 +5,4 @@
  - it reads the JSON obj convert it into js object and add jsobj and adds it to req.body
  - findOneAndDelete(userId) is a shorthand for findOneAndDelete({ _id: userId }) 
  - PUT replaces the entire resource with the provided data, whereas PATCH only updates the specific fields of the resource
+ - const authRouter = express.Router() and const app = express() are similar.
