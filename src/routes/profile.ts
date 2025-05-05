@@ -57,4 +57,3 @@ profileRouter.patch("/profile/edit", userAuth, async(req: AuthRequest, res: Resp
 })
 
 export default profileRouter;
-
