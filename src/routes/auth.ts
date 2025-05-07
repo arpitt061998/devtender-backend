@@ -8,7 +8,6 @@ authRouter.post("/signup", async(req: Request, res: Response) => {
     const {firstName, lastName, emailId, password, gender, age} = req.body;
     const user = new User(req.body);
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-    console.log(hashedPassword);
     try {
         const user = new User({
             firstName, lastName, emailId, password: hashedPassword, gender, age 
@@ -49,6 +48,5 @@ authRouter.post("/logout", async(req: Request, res: Response) => {
         res.status(401).send("Err: "+err);
     }
 });
-
 
 export default authRouter;

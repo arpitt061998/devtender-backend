@@ -4,7 +4,7 @@ authRouter
 - POST /login
 - POST /logout
 
-profileRouter
+# profileRouter
 - GET /profile
 - PATCH /profile/edit
 - PATCH /profile/password
@@ -17,9 +17,9 @@ connectionRequestRouter
 - POST /request/review/accepted/:requestId
 - POST /request/review/rejected/:requestId
 
-
-- GET /connections
-- GET /requests/recieved
+# userrouter
+- GET /user/connections
+- GET user//requests
 - GET /feed - gets you the profile of other users on platform
 
 

@@ -11,10 +11,12 @@ const connectionRequestSchmema = new Schema<IConnectionRequest>(
     {
         fromUserId: {
             type: mongoose.Schema.Types.ObjectId,
+            ref: "User",  // reference to user collection
             required: true
         },
         toUserId: {
             type: mongoose.Schema.Types.ObjectId,
+            ref: "User",  //refrence to user collections
             required: true,
         },
         status: {
@@ -29,7 +31,6 @@ const connectionRequestSchmema = new Schema<IConnectionRequest>(
     {timestamps: true}
 );
 
-
 // we are doing here compound indexing it makes queries very very faster
 connectionRequestSchmema.index({fromUserId: 1, toUserId: 1});
 
@@ -42,7 +43,6 @@ connectionRequestSchmema.pre("save", function (next) {
 
     next();
 });
-
 
 const ConnectionRequest = mongoose.model<IConnectionRequest>('ConnectionRequest', connectionRequestSchmema);
 export default ConnectionRequest;

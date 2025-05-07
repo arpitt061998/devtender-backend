@@ -4,6 +4,7 @@ import connectDB from './config/database';
 import profileRouter from './routes/profile';
 import authRouter from './routes/auth';
 import requestRouter from './routes/request';
+import userRouter from './routes/user';
 const app = express();
 const port = 3000;
 const SALT_ROUNDS = 10;
@@ -14,6 +15,7 @@ app.use(cookieParser());
 app.use("/",authRouter);
 app.use("/",profileRouter);
 app.use("/",requestRouter);
+app.use("/",userRouter);
 
 
 connectDB().then(() => {

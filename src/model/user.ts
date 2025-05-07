@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 export interface IUser extends Document {
+    _id: mongoose.Schema.Types.ObjectId;
     firstName: string;
     lastName: string;
     emailId: string;
