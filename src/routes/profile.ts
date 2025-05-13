@@ -7,8 +7,10 @@ import { validateEditProfileData } from '../utils/validation';
 
 profileRouter.get("/profile/view", userAuth, (req: AuthRequest, res: Response) => {
     const user = req.user;
-    res.send("user profile is "+user);
-});
+    res.status(200).json({
+        message: "valid user",
+        data: user
+    })
 
 profileRouter.delete("/user", async(req: Request, res: Response) => {
     const userId = req.body.userId;
