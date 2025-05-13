@@ -5,7 +5,7 @@ const profileRouter = express.Router();
 import User, { IUser } from "../model/user";
 import { validateEditProfileData } from '../utils/validation';
 
-profileRouter.get("/profile", userAuth, (req: AuthRequest, res: Response) => {
+profileRouter.get("/profile/view", userAuth, (req: AuthRequest, res: Response) => {
     const user = req.user;
     res.send("user profile is "+user);
 });

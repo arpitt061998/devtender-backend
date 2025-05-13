@@ -4,6 +4,8 @@ import bcrypt from "bcrypt";
 const authRouter = express.Router();
 const SALT_ROUNDS = 10;
 
+const USER_SAFE_DATA = ["firstName", "lastName", "age", "skills", "gender", "photoUrl"];
+
 authRouter.post("/signup", async(req: Request, res: Response) => {
     const {firstName, lastName, emailId, password, gender, age} = req.body;
     const user = new User(req.body);
@@ -31,7 +33,10 @@ authRouter.post("/login",async(req: Request, res: Response) => {
         if(isPasswordValid){
             const token = await user.getJWT();
             res.cookie("token", token);
-            res.status(200).send("Login successful");
+            res.status(200).json({
+                message: "Login successful",
+                data: user
+            });
         } else {
             res.status(401).send("Invalid password");
         }
