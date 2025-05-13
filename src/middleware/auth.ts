@@ -7,7 +7,8 @@ const userAuth: RequestHandler = async(req: AuthRequest, res: Response, next: Ne
     const {token} = req.cookies;
     try {
         if(!token){
-            throw new Error("Token not valid");
+            res.status(401).json({ message: "Please login" });
+            return;
         }
         const decodedMessage = jwt.verify(token, "DevTinder@123");
         console.log(decodedMessage);

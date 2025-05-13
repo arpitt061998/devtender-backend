@@ -11,6 +11,7 @@ profileRouter.get("/profile/view", userAuth, (req: AuthRequest, res: Response) =
         message: "valid user",
         data: user
     })
+});
 
 profileRouter.delete("/user", async(req: Request, res: Response) => {
     const userId = req.body.userId;
