@@ -5,8 +5,8 @@ import userAuth from "../middleware/auth";
 const userRouter = express.Router();
 import User, { IUser } from "../model/user";
 
-const USER_SAFE_DATA = ["firstName", "lastName", "age", "skills", "gender", "photoUrl"];
-userRouter.get("/user/requests/pending", userAuth, async (req: AuthRequest, res: Response) => {
+const USER_SAFE_DATA = ["firstName", "lastName", "age", "skills", "gender", "photoUrl", "about"];
+userRouter.get("/user/requests", userAuth, async (req: AuthRequest, res: Response) => {
     try {
         const loggedInUser = req.user;
         const userId = loggedInUser?._id;
@@ -29,7 +29,7 @@ userRouter.get("/user/requests/pending", userAuth, async (req: AuthRequest, res:
 
         res.status(200).json({
             message: `${firstName}'s connections`,
-            connections: connections
+            data: connections
         });
 
     } catch (err: any) {
@@ -62,7 +62,7 @@ userRouter.get("/user/connections", userAuth, async(req: AuthRequest, res: Respo
 
         res.status(200).json({
             message: loggedInUser?.firstName + " connections are: ",
-            connections: data
+            data: data
         });
     } catch(err: any) {
         res.status(500).json({ message: "Internal server error "+ err.message });
