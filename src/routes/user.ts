@@ -23,7 +23,7 @@ userRouter.get("/user/requests", userAuth, async (req: AuthRequest, res: Respons
         }).populate("fromUserId", USER_SAFE_DATA);
 
         if (connections.length === 0) {
-            res.status(404).json({ message: "No connections found" });
+            res.status(200).json({ message: "No connections found", data: connections });
             return;
         }
 
@@ -104,7 +104,7 @@ userRouter.get("/user/feed",userAuth, async(req: AuthRequest, res: Response) => 
 
         res.status(200).send({
             message: "Feeds are: ",
-            feed: feedUsers
+            data: feedUsers
         });
     } catch(err:any) {
         res.status(400).send("Error: "+err)

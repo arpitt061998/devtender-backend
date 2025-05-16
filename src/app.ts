@@ -22,7 +22,6 @@ app.use("/",profileRouter);
 app.use("/",requestRouter);
 app.use("/",userRouter);
 
-
 connectDB().then(() => {
     console.log("databse connection established");
     app.listen(port, () => {

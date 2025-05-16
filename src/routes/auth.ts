@@ -4,15 +4,15 @@ import bcrypt from "bcrypt";
 const authRouter = express.Router();
 const SALT_ROUNDS = 10;
 
-const USER_SAFE_DATA = ["firstName", "lastName", "age", "skills", "gender", "photoUrl"];
+const USER_SAFE_DATA = ["firstName", "lastName", "age", "skills", "gender", "photoUrl", "about"];
 
 authRouter.post("/signup", async(req: Request, res: Response) => {
-    const {firstName, lastName, emailId, password, gender, age} = req.body;
+    const {firstName, lastName, emailId, password, gender, age, photoUrl, about} = req.body;
     const user = new User(req.body);
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     try {
         const user = new User({
-            firstName, lastName, emailId, password: hashedPassword, gender, age 
+            firstName, lastName, emailId, password: hashedPassword, gender, age, photoUrl, about
         })
         await user.save();
         res.status(200).send("user added successfully")

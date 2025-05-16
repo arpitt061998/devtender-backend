@@ -50,7 +50,7 @@ const userSchema = new Schema<IUser>({
     },
     photoUrl: { 
         type: String,
-        default: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pngitem.com%2Fmiddle%2Fhbomhxw_transparent-default-avatar-png-default-avatar-images-png%2F&psig=AOvVaw1FX9l0qS5efaiuU3rkT2HJ&ust=1745408999928000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPjw27PJ64wDFQAAAAAdAAAAABAJ",
+        default: "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg?semt=ais_hybrid&w=740",
         validate: {
             validator: (value: string) => {
                 return isURL(value);
