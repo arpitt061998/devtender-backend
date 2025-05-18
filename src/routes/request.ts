@@ -4,7 +4,9 @@ import userAuth from "../middleware/auth";
 import { AuthRequest } from "../types/interface";
 import ConnectionRequest from "../model/connectionRequest";
 import User from "../model/user";
+import {run as sendEmail} from "../utils/sendEmail";
 
+const SENDER_MAIL_ID = "no-reply@developerstinder.in";
 requestRouter.post("/sendConnectionRequest", userAuth, (req: AuthRequest, res: Response) => {
     res.send(req.user?.firstName+ " the sent connection request ");
 });
@@ -57,6 +59,7 @@ requestRouter.post("/request/send/:status/:toUserId",
             }
 
             const data = await connectionRequest.save();
+            await sendEmail(SENDER_MAIL_ID, toUser?.emailId, "Connection Request", "You have received a connection request from "+ req.user?.firstName);
 
             res.status(200).json({
                 message: "Connection Request sent successfully",
@@ -91,7 +94,6 @@ requestRouter.post("/request/review/:status/:requestId",userAuth, async(req: Aut
         }
         connectionRequest.status = status;
         const data = await connectionRequest.save();
-
         res.status(200).json({message: "Connection Request "+ status, data});
 
     } catch(err: any) {

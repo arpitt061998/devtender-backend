@@ -1,8 +1,10 @@
 import express, {Request, Response} from "express";
 import User from "../model/user";
 import bcrypt from "bcrypt";
+import {run as sendEmail} from "../utils/sendEmail";
 const authRouter = express.Router();
 const SALT_ROUNDS = 10;
+const SENDER_MAIL_ID = "no-reply@developerstinder.in";
 
 const USER_SAFE_DATA = ["firstName", "lastName", "age", "skills", "gender", "photoUrl", "about"];
 
@@ -15,6 +17,7 @@ authRouter.post("/signup", async(req: Request, res: Response) => {
             firstName, lastName, emailId, password: hashedPassword, gender, age, photoUrl, about
         })
         await user.save();
+        await sendEmail(emailId, SENDER_MAIL_ID ,"Welcome to DevTinder", "You have successfully signed up");
         res.status(200).send("user added successfully")
     } catch(err: any){
         res.status(400).send(err.message)
