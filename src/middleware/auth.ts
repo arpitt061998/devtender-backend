@@ -10,7 +10,7 @@ const userAuth: RequestHandler = async(req: AuthRequest, res: Response, next: Ne
             res.status(401).json({ message: "Please login" });
             return;
         }
-        const decodedMessage = jwt.verify(token, "DevTinder@123");
+        const decodedMessage = jwt.verify(token, process.env.JWT_SECRET as string);
         console.log(decodedMessage);
         const {id} = decodedMessage as JwtPayload; 
         const user = await User.findById(id);

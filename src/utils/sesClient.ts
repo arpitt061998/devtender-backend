@@ -1,14 +1,10 @@
 import { SESClient } from "@aws-sdk/client-ses";
-import dotenv from "dotenv";
-
-dotenv.config(); // Load environment variables from .env file
 
 const REGION = process.env.AWS_REGION;
 
-if (!process.env.AWS_ACCESS_KEY || !process.env.AWS_SECRET_KEY) {
-  throw new Error("AWS_ACCESS_KEY or AWS_SECRET_KEY is not defined in the environment variables.");
+if (!process.env.AWS_ACCESS_KEY || !process.env.AWS_SECRET_KEY || !process.env.AWS_REGION) {
+  throw new Error("AWS_ACCESS_KEY, AWS_SECRET_KEY, or AWS_REGION is not defined in the environment variables.");
 }
-
 
 // for v3
 const sesClient = new SESClient({

@@ -3,7 +3,7 @@ import User from "../model/user";
 import bcrypt from "bcrypt";
 import {run as sendEmail} from "../utils/sendEmail";
 const authRouter = express.Router();
-const SALT_ROUNDS = 10;
+const SALT_ROUNDS = process.env.SALT_ROUNDS || 10;
 const SENDER_MAIL_ID = "no-reply@developerstinder.in";
 
 const USER_SAFE_DATA = ["firstName", "lastName", "age", "skills", "gender", "photoUrl", "about"];

@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import connectDB from './config/database';
@@ -6,9 +8,10 @@ import authRouter from './routes/auth';
 import requestRouter from './routes/request';
 import userRouter from './routes/user';
 import cors from 'cors';
+
 const app = express();
-const port = 3000;
-const SALT_ROUNDS = 10;
+
+const port = process.env.PORT || 3000;
 
 app.use(cors({
     origin: "http://localhost:5173",

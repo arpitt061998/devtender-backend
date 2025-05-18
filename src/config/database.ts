@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const connectDB = async() => {
     await mongoose.connect(
-        "mongodb+srv://arpittiwari:DMrUfpyv5ypQT8pz@devtinder-be.dcxhmkr.mongodb.net/devTinder"
+        process.env.DB_CONNECTION_SECRET as string,
     );
 }
 
