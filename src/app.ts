@@ -8,6 +8,9 @@ import authRouter from './routes/auth';
 import requestRouter from './routes/request';
 import userRouter from './routes/user';
 import cors from 'cors';
+import http from 'http';
+import intializeSocket from "./utils/socket";
+import chatRouter from "./routes/chat";
 
 const app = express();
 
@@ -20,14 +23,18 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
-app.use("/",authRouter);
-app.use("/",profileRouter);
-app.use("/",requestRouter);
-app.use("/",userRouter);
+app.use("/", authRouter);
+app.use("/", profileRouter);
+app.use("/", requestRouter);
+app.use("/", userRouter);
+app.use("/", chatRouter);
+
+const server = http.createServer(app);
+intializeSocket(server);
 
 connectDB().then(() => {
     console.log("databse connection established");
-    app.listen(port, () => {
+    server.listen(port, () => {
         console.log(`Server is running at http://localhost:${port}`);
     });
 }).catch((err: Error )=> {

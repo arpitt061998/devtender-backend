@@ -11,10 +11,8 @@ const userAuth: RequestHandler = async(req: AuthRequest, res: Response, next: Ne
             return;
         }
         const decodedMessage = jwt.verify(token, process.env.JWT_SECRET as string);
-        console.log(decodedMessage);
         const {id} = decodedMessage as JwtPayload; 
         const user = await User.findById(id);
-        console.log("user",user);
         if (!user) {
             res.status(404).json({ message: 'User not found' });
             return;
