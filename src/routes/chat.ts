@@ -17,7 +17,6 @@ chatRouter.get("/chat/:targetUserId", userAuth, async(req: AuthRequest, res: Res
       path: "messages.senderId",
       select: "firstName lastName"
     });
-    console.log("***chat***",chat?.messages)
     if(!chat){
       chat = new Chat({
         participants: [userId, targetUserId],
@@ -30,9 +29,10 @@ chatRouter.get("/chat/:targetUserId", userAuth, async(req: AuthRequest, res: Res
       data: chat
     })
   } catch(err) {
-
+    res.status(500).json({
+      data: "Unable to send message"
+    })
   }
-
 })
 
 
