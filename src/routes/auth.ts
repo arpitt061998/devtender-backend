@@ -29,28 +29,28 @@ authRouter.post("/signup", async(req: Request, res: Response) => {
     }
 });
 
-authRouter.post("/login",async(req: Request, res: Response) => {
+authRouter.post("/login", async (req: Request, res: Response) => {
     try {
         console.log(req.body)
-        const {emailId, password} = req.body;
-        const user = await User.findOne({emailId: emailId});
-        if(!user){
+        const { emailId, password } = req.body;
+        const user = await User.findOne({ emailId: { $regex: `^${emailId}$`, $options: "i" } }); // Case-insensitive search
+        if (!user) {
             res.status(404).json({ error: "user does not exist", message: "Email not found" });
             return;
         }
         const isPasswordValid = await user.isPasswordValid(password);
-        if(isPasswordValid){
+        if (isPasswordValid) {
             const token = await user.getJWT();
             res.cookie("token", token);
             res.status(200).json({
                 message: "Login successful",
-                data: user
+                data: user,
             });
         } else {
-            res.status(401).json({ error: "Invalid Passowrd", message: "Invalid password" });
+            res.status(401).json({ error: "Invalid Password", message: "Invalid password" });
         }
-    } catch(err:any){
-        res.status(500).send("Err: "+err);
+    } catch (err: any) {
+        res.status(500).send("Err: " + err);
     }
 });
 
