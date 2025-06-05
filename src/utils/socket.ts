@@ -45,15 +45,15 @@ const intializeSocket = (server: any) => {
               console.log("Unauthorized message attempt. User not loggedin");
               return;
             }
-            const existingConnectinRequest = await ConnectionRequest.findOne({
+            const isValidConnection = await ConnectionRequest.findOne({
               $or: [
                   {fromUserId: userId, toUserId: targetUserId},
-                  {fromUserId: targetUserId, touserId: userId}
+                  {fromUserId: targetUserId, toUserId: userId}
               ],
               status: "accepted"
             });
 
-            if(!existingConnectinRequest){
+            if(!isValidConnection){
               console.log("Unauthorized message attempt. Connections not established between users");
               return;
             }
