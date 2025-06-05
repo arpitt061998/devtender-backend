@@ -11,7 +11,6 @@ const USER_SAFE_DATA = ["firstName", "lastName", "age", "skills", "gender", "pho
 authRouter.post("/signup", async(req: Request, res: Response) => {
     const {firstName, lastName, emailId, password, gender, age, photoUrl, about} = req.body;
     const user = new User(req.body);
-    console.log("SALT ROUNDS ARE ",SALT_ROUNDS, password);
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     try {
         const user = new User({
@@ -21,7 +20,12 @@ authRouter.post("/signup", async(req: Request, res: Response) => {
         await sendEmail(emailId, SENDER_MAIL_ID ,"Welcome to DevTinder", "You have successfully signed up");
         res.status(200).send("user added successfully")
     } catch(err: any){
-        res.status(400).send(err.message)
+        if (err.code === 11000 && err.keyPattern?.emailId) {
+            res.status(400).json({ error: "Duplicate email error", message: "Email ID already exists" });
+        } else {
+            console.log(err.message);
+            res.status(400).send(err.message);
+        }
     }
 });
 
@@ -31,7 +35,8 @@ authRouter.post("/login",async(req: Request, res: Response) => {
         const {emailId, password} = req.body;
         const user = await User.findOne({emailId: emailId});
         if(!user){
-            throw new Error("user not found")
+            res.status(404).json({ error: "user does not exist", message: "Email not found" });
+            return;
         }
         const isPasswordValid = await user.isPasswordValid(password);
         if(isPasswordValid){
@@ -42,10 +47,10 @@ authRouter.post("/login",async(req: Request, res: Response) => {
                 data: user
             });
         } else {
-            res.status(401).send("Invalid password");
+            res.status(401).json({ error: "Invalid Passowrd", message: "Invalid password" });
         }
     } catch(err:any){
-        res.status(401).send("Err: "+err);
+        res.status(500).send("Err: "+err);
     }
 });
 
