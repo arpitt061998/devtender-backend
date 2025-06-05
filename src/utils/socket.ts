@@ -1,6 +1,9 @@
 import socket from "socket.io";
 import crypto from "crypto";
 import Chat from "../model/chat";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import ConnectionRequest from "../model/connectionRequest";
+
 
 const getSecretRoomId = ({ userId, targetUserId }: { userId: string; targetUserId: string }): string => {
   const sortedIds = [userId, targetUserId].sort(); // Sort the user IDs alphabetically
@@ -33,10 +36,29 @@ const intializeSocket = (server: any) => {
           console.log("User left chat");
         })
 
-        socket.on("sendMessage", async({userId, targetUserId, firstName, text}) => {
+        socket.on("sendMessage", async({userId, targetUserId, firstName, text, token}) => {
           try {
+            if (!token) return;
+            const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
+
+            if (!decoded || decoded.id !== userId) {
+              console.log("Unauthorized message attempt. User not loggedin");
+              return;
+            }
+            const existingConnectinRequest = await ConnectionRequest.findOne({
+              $or: [
+                  {fromUserId: userId, toUserId: targetUserId},
+                  {fromUserId: targetUserId, touserId: userId}
+              ],
+              status: "accepted"
+            });
+
+            if(!existingConnectinRequest){
+              console.log("Unauthorized message attempt. Connections not established between users");
+              return;
+            }
+
             const roomId = getSecretRoomId({ userId, targetUserId });
-            console.log(firstName," says", text);
             const senderUserId = userId;
             let chat = await Chat.findOne({
               participants: {$all: [userId, targetUserId]}
