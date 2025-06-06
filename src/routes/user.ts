@@ -69,45 +69,52 @@ userRouter.get("/user/connections", userAuth, async(req: AuthRequest, res: Respo
     }
 });
 
-userRouter.get("/user/feed",userAuth, async(req: AuthRequest, res: Response) => {
-    try{
+userRouter.get("/user/feed", userAuth, async (req: AuthRequest, res: Response) => {
+    try {
         const loggedInUser = req.user;
         const userId = loggedInUser?._id;
+
+        if (!userId) {
+            res.status(400).send("Invalid user ID");
+            return;
+        }
+
         const page = parseInt(req.query.page as string || "1");
         let limit = parseInt(req.query.limit as string || "10");
 
         limit = limit > 50 ? 50 : limit;
-        const skip = (page-1)*limit;
+        const skip = (page - 1) * limit;
 
-        // User should see all the user card expect-
-        // his own card
+        // User should see all the user cards except:
+        // their own card
         // ignored people
-        // already sent connection request
+        // already sent connection requests
 
         const connectionRequests = await ConnectionRequest.find({
             $or: [
-                {fromUserId: userId},
-                {toUserId: userId}
+                { fromUserId: userId },
+                { toUserId: userId }
             ]
         }).select("fromUserId toUserId");
 
         const hideUserIds = new Set<string>();
+        hideUserIds.add(userId.toString()); // Exclude logged-in user's own card
 
         connectionRequests.forEach((connection) => {
             hideUserIds.add(connection.fromUserId.toString());
             hideUserIds.add(connection.toUserId.toString());
-        })
+        });
 
         const feedUsers = await User.find({
-            _id: {$nin: Array.from(hideUserIds)}
+            _id: { $nin: Array.from(hideUserIds) }
         }).select(USER_SAFE_DATA).skip(skip).limit(limit);
 
         res.status(200).send({
             message: "Feeds are: ",
             data: feedUsers
         });
-    } catch(err:any) {
-        res.status(400).send("Error: "+err)
+    } catch (err: any) {
+        res.status(400).send("Error: " + err);
     }
 });
 
