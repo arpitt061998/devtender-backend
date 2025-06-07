@@ -149,6 +149,7 @@ userRouter.get("/users/all", async(req: Request, res: Response) => {
     try {
         const users = await User.find();
         res.status(200).json({
+            count: users.length,
             users: users
         })
     } catch(err) {
