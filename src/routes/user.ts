@@ -143,5 +143,44 @@ userRouter.get("/user/all", userAuth, async(req: AuthRequest, res: Response) => 
     }
 });
 
+
+//test api to return all user for ashu 
+userRouter.get("/users/all", async(req: Request, res: Response) => {
+    try {
+        const users = await User.find();
+        res.status(200).json({
+            users: users
+        })
+    } catch(err) {
+        res.status(400).send("Failed")
+    }
+});
+
+//test api to return all user for ashu 
+userRouter.get("/user", async(req: Request, res: Response) => {
+    try {
+        
+        const age = parseInt(req.query.age as string || "0");
+        const fname = req.query.fname as string;
+        
+        const query: any = {
+          age: { $gte: age }
+        };
+        
+        if (fname) {
+          query.firstName = { $regex: fname, $options: "i" }; // case-insensitive match
+        }
+        
+        const users = await User.find(query);
+        
+        res.status(200).json({
+            count: users.length,
+            users: users,
+        })
+    } catch(err) {
+        res.status(400).send("Failed")
+    }
+});
+
 export default userRouter;
 
